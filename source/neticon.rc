@@ -1,0 +1,137 @@
+/******************************************************************************
+    サービスアイコン
+        サービスアイコン リソースファイル
+            Copyright(C) 2007 Wraith.   All rights reserved.
+                                            Coded by Wraith in Jul 30, 2007.
+******************************************************************************/
+
+///////////////////////////////////////////////////////////////////////////////
+//
+//  ■ neticon.rc
+//      http://tricklib.com/cxx/ex/neticon/neticon.rc
+//
+//  □ 関連ファイル
+//      ソースファイル
+//      http://tricklib.com/cxx/ex/neticon/neticon.cpp
+//      リソースヘッダファイル
+//      http://tricklib.com/cxx/ex/neticon/neticon.rh
+//      アプリケーションアイコン
+//      http://tricklib.com/cxx/ex/neticon/neticon.ico
+//      デフォルトネットアイコン
+//      http://tricklib.com/cxx/ex/neticon/svc.ico
+//      "start"アイコン
+//      http://tricklib.com/cxx/ex/neticon/start.ico
+//      "stop"アイコン
+//      http://tricklib.com/cxx/ex/neticon/stop.ico
+//      "log"アイコン
+//      http://tricklib.com/cxx/ex/neticon/log.ico
+//      "閉じる"アイコン
+//      http://tricklib.com/cxx/ex/neticon/close.ico
+//      "OK"オーバーレイアイコン
+//      http://tricklib.com/cxx/ex/neticon/ok.ico
+//      "NG"オーバーレイアイコン
+//      http://tricklib.com/cxx/ex/neticon/ng.ico
+//      チェックマークオーバーレイアイコン
+//      http://tricklib.com/cxx/ex/neticon/check.ico
+//      全ファイルパック
+//      http://tricklib.com/cxx/ex/neticon/neticon.zip
+//
+//  □ リファレンス・サポートページ
+//      http://tricklib.com/cxx/ex/neticon/
+//
+//  □ ライセンス情報
+//      http://tricklib.com/license.htm
+//
+//  □ コンパイル方法
+//      case Borland C++
+//          brcc32 neticon.rc
+//      case Visual C++
+//          rc neticon.rc
+//      case gcc
+//          windres neticon.rc neticon.res
+//      case CodeWarrior
+//          mwwinrc neticon.rc
+//
+
+#include "neticon.rh"
+
+///////////////////////////////////////////////////////////////////////////////
+//
+//  ICON
+//
+
+APPLICATION_ICON        ICON DISCARDABLE "neticon.ico"
+
+DEFAULT_NET_ICON        ICON DISCARDABLE "net.ico"
+
+//DO_REFRESH_ICON         ICON DISCARDABLE "refresh.ico"
+DO_START_ICON           ICON DISCARDABLE "start.ico"
+DO_STOP_ICON            ICON DISCARDABLE "stop.ico"
+DO_LOG_ICON             ICON DISCARDABLE "log.ico"
+DO_CLOSE_ICON           ICON DISCARDABLE "close.ico"
+
+STATUS_OK_ICON          ICON DISCARDABLE "ok.ico"
+STATUS_NG_ICON          ICON DISCARDABLE "ng.ico"
+
+MENU_CHECKMARK_ICON     ICON DISCARDABLE "check.ico"
+
+
+///////////////////////////////////////////////////////////////////////////////
+//
+//  MENU
+//
+
+NOTIFYICON_MENU MENU
+{
+    POPUP "notify icon"
+    {
+//        MENUITEM "今すぐチェック(&R)", DO_REFRESH_ICON
+//        MENUITEM SEPARATOR
+        MENUITEM "定期チェックの再開(&S)", DO_START_ICON
+        MENUITEM "定期チェックの停止(&O)", DO_STOP_ICON
+        MENUITEM SEPARATOR
+        MENUITEM "OutputDebugString(&Log)", DO_LOG_ICON
+        MENUITEM SEPARATOR
+        MENUITEM "終了(&X)", DO_CLOSE_ICON
+    }
+}
+
+///////////////////////////////////////////////////////////////////////////////
+//
+//  VERSIONINFO
+//
+
+1 VERSIONINFO
+FILEVERSION 1, 0, 4, 0
+PRODUCTVERSION 1, 0, 4, 0
+FILEOS 0x00010004L // == VOS__WINDOWS32
+FILETYPE 0x00000001L // == VFT_APP
+{
+ BLOCK "StringFileInfo"
+ {
+  BLOCK "041104B0"
+  {
+   VALUE "Comments", "http://tricklib.com/cxx/ex/neticon/\000"
+   VALUE "CompanyName", "TrickPalace\000"
+   VALUE "FileDescription", "Net Icon\000"
+   VALUE "FileVersion", "1.04\000"
+   VALUE "InternalName", "Net Icon\000"
+   VALUE "LegalCopyright", "Copyright (C) 2007,2008 Wraith the Trickster.\000"
+   VALUE "OriginalFilename", "neticon.exe\000"
+   VALUE "ProductName", "Net Icon\000"
+   VALUE "ProductVersion", "1.04\000"
+  }
+
+ }
+
+ BLOCK "VarFileInfo"
+ {
+  VALUE "Translation", 1041, 1200
+ }
+
+}
+
+/******************************************************************************
+    □■□■                  Wraith the Trickster                  □■□■
+    ■□■□ ～I'll go with heaven's advantage and fool's wisdom.～ ■□■□
+******************************************************************************/

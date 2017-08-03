@@ -1,0 +1,66 @@
+/******************************************************************************
+    サービスアイコン
+        サービスアイコン リソースヘッダファイル
+            Copyright(C) 2007 Wraith.   All rights reserved.
+                                            Coded by Wraith in Jul 30, 2007.
+******************************************************************************/
+
+///////////////////////////////////////////////////////////////////////////////
+//
+//  ■ neticon.rh
+//      http://tricklib.com/cxx/ex/neticon/neticon.rh
+//
+//  □ 関連ファイル
+//      ソースファイル
+//      http://tricklib.com/cxx/ex/neticon/neticon.cpp
+//      リソースファイル
+//      http://tricklib.com/cxx/ex/neticon/neticon.rc
+//      アプリケーションアイコン
+//      http://tricklib.com/cxx/ex/neticon/neticon.ico
+//      デフォルトネットアイコン
+//      http://tricklib.com/cxx/ex/neticon/svc.ico
+//      "start"アイコン
+//      http://tricklib.com/cxx/ex/neticon/start.ico
+//      "stop"アイコン
+//      http://tricklib.com/cxx/ex/neticon/stop.ico
+//      "log"アイコン
+//      http://tricklib.com/cxx/ex/neticon/log.ico
+//      "閉じる"アイコン
+//      http://tricklib.com/cxx/ex/neticon/close.ico
+//      "OK"オーバーレイアイコン
+//      http://tricklib.com/cxx/ex/neticon/ok.ico
+//      "NG"オーバーレイアイコン
+//      http://tricklib.com/cxx/ex/neticon/ng.ico
+//      チェックマークオーバーレイアイコン
+//      http://tricklib.com/cxx/ex/neticon/check.ico
+//      全ファイルパック
+//      http://tricklib.com/cxx/ex/neticon/neticon.zip
+//
+//  □ リファレンス・サポートページ
+//      http://tricklib.com/cxx/ex/neticon/
+//
+//  □ ライセンス情報
+//      http://tricklib.com/license.htm
+//
+
+#define APPLICATION_ICON        100
+
+#define DEFAULT_NET_ICON        101
+
+#define DO_REFRESH_ICON         201
+#define DO_START_ICON           202
+#define DO_STOP_ICON            203
+#define DO_LOG_ICON             204
+#define DO_CLOSE_ICON           205
+
+#define STATUS_OK_ICON          301
+#define STATUS_NG_ICON          302
+
+#define MENU_CHECKMARK_ICON     1000
+
+#define NOTIFYICON_MENU         100
+
+/******************************************************************************
+    □■□■                  Wraith the Trickster                  □■□■
+    ■□■□ ～I'll go with heaven's advantage and fool's wisdom.～ ■□■□
+******************************************************************************/
