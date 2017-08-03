@@ -114,12 +114,12 @@ FILETYPE 0x00000001L // == VFT_APP
    VALUE "Comments", "http://tricklib.com/cxx/ex/neticon/\000"
    VALUE "CompanyName", "TrickPalace\000"
    VALUE "FileDescription", "Net Icon\000"
-   VALUE "FileVersion", "1.04\000"
+   VALUE "FileVersion", VERSION_STRING "\000"
    VALUE "InternalName", "Net Icon\000"
    VALUE "LegalCopyright", "Copyright (C) 2007,2008 Wraith the Trickster.\000"
    VALUE "OriginalFilename", "neticon.exe\000"
    VALUE "ProductName", "Net Icon\000"
-   VALUE "ProductVersion", "1.04\000"
+   VALUE "ProductVersion", VERSION_STRING "\000"
   }
 
  }
