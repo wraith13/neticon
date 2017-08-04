@@ -60,20 +60,20 @@
 //  ICON
 //
 
-APPLICATION_ICON        ICON DISCARDABLE "neticon.ico"
+APPLICATION_ICON        ICON DISCARDABLE "resource\\neticon.ico"
 
-DEFAULT_NET_ICON        ICON DISCARDABLE "net.ico"
+DEFAULT_NET_ICON        ICON DISCARDABLE "resource\\net.ico"
 
-//DO_REFRESH_ICON         ICON DISCARDABLE "refresh.ico"
-DO_START_ICON           ICON DISCARDABLE "start.ico"
-DO_STOP_ICON            ICON DISCARDABLE "stop.ico"
-DO_LOG_ICON             ICON DISCARDABLE "log.ico"
-DO_CLOSE_ICON           ICON DISCARDABLE "close.ico"
+//DO_REFRESH_ICON         ICON DISCARDABLE "resource\\refresh.ico"
+DO_START_ICON           ICON DISCARDABLE "resource\\start.ico"
+DO_STOP_ICON            ICON DISCARDABLE "resource\\stop.ico"
+DO_LOG_ICON             ICON DISCARDABLE "resource\\log.ico"
+DO_CLOSE_ICON           ICON DISCARDABLE "resource\\close.ico"
 
-STATUS_OK_ICON          ICON DISCARDABLE "ok.ico"
-STATUS_NG_ICON          ICON DISCARDABLE "ng.ico"
+STATUS_OK_ICON          ICON DISCARDABLE "resource\\ok.ico"
+STATUS_NG_ICON          ICON DISCARDABLE "resource\\ng.ico"
 
-MENU_CHECKMARK_ICON     ICON DISCARDABLE "check.ico"
+MENU_CHECKMARK_ICON     ICON DISCARDABLE "resource\\check.ico"
 
 
 ///////////////////////////////////////////////////////////////////////////////
