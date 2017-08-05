@@ -318,11 +318,11 @@ namespace net
             WSADATA wsa;
             if (0 != WSAStartup(0x0101, &wsa))
             {
-                OutputDebugString("WSAStartup: faild");
+                OutputDebugString(_T("WSAStartup: faild"));
                 OutputDebugString(make_error_message(WSAGetLastError()).c_str());
             }
             
-            icmp_lib = LoadLibrary("ICMP.DLL");
+            icmp_lib = LoadLibrary(_T("ICMP.DLL"));
             if (icmp_lib)
             {
                 IcmpCreateFile  = (IcmpCreateFile_PROC_TYPE)    GetProcAddress(icmp_lib,"IcmpCreateFile");
@@ -330,7 +330,7 @@ namespace net
                 IcmpCloseHandle = (IcmpCloseHandle_PROC_TYPE)   GetProcAddress(icmp_lib,"IcmpCloseHandle");
             }
             
-            iphlpapi_lib = LoadLibrary("IPHLPAPI.DLL");
+            iphlpapi_lib = LoadLibrary(_T("IPHLPAPI.DLL"));
             if (iphlpapi_lib)
             {
                 Icmp6CreateFile = (Icmp6CreateFile_PROC_TYPE)   GetProcAddress(iphlpapi_lib,"Icmp6CreateFile");
@@ -381,28 +381,28 @@ namespace net
         //
         if (NULL == icmp_lib)
         {
-            OutputDebugString("LoadLibrary(\"icmp.dll\"): faild");
+            OutputDebugString(_T("LoadLibrary(\"icmp.dll\"): faild"));
             return false;
         }
         if (NULL == iphlpapi_lib)
         {
-            OutputDebugString("LoadLibrary(\"iphlpapi.dll\"): faild");
+            OutputDebugString(_T("LoadLibrary(\"iphlpapi.dll\"): faild"));
             return false;
         }
         
         if (NULL == Icmp6CreateFile)
         {
-            OutputDebugString("GetProcAddress(LoadLibrary(\"iphlpapi.dll\"), \"Icmp6CreateFile\"): faild");
+            OutputDebugString(_T("GetProcAddress(LoadLibrary(\"iphlpapi.dll\"), \"Icmp6CreateFile\"): faild"));
             return false;
         }
         if (NULL == Icmp6SendEcho2)
         {
-            OutputDebugString("GetProcAddress(LoadLibrary(\"iphlpapi.dll\"), \"Icmp6SendEcho2\"): faild");
+            OutputDebugString(_T("GetProcAddress(LoadLibrary(\"iphlpapi.dll\"), \"Icmp6SendEcho2\"): faild"));
             return false;
         }
         if (NULL == IcmpCloseHandle)
         {
-            OutputDebugString("GetProcAddress(LoadLibrary(\"icmp.dll\"), \"IcmpCloseHandle\"): faild");
+            OutputDebugString(_T("GetProcAddress(LoadLibrary(\"icmp.dll\"), \"IcmpCloseHandle\"): faild"));
             return false;
         }
 
@@ -412,7 +412,7 @@ namespace net
         HANDLE icmp_handle = Icmp6CreateFile();
         if (icmp_handle == INVALID_HANDLE_VALUE)
         {
-            OutputDebugString("Icmp6CreateFile(): faild");
+            OutputDebugString(_T("Icmp6CreateFile(): faild"));
             return false;
         }
 
@@ -506,22 +506,22 @@ namespace net
         //
         if (NULL == icmp_lib)
         {
-            OutputDebugString("LoadLibrary(\"icmp.dll\"): faild");
+            OutputDebugString(_T("LoadLibrary(\"icmp.dll\"): faild"));
             return false;
         }
         if (NULL == IcmpCreateFile)
         {
-            OutputDebugString("GetProcAddress(LoadLibrary(\"icmp.dll\"), \"IcmpCreateFile\"): faild");
+            OutputDebugString(_T("GetProcAddress(LoadLibrary(\"icmp.dll\"), \"IcmpCreateFile\"): faild"));
             return false;
         }
         if (NULL == IcmpSendEcho)
         {
-            OutputDebugString("GetProcAddress(LoadLibrary(\"icmp.dll\"), \"IcmpSendEcho\"): faild");
+            OutputDebugString(_T("GetProcAddress(LoadLibrary(\"icmp.dll\"), \"IcmpSendEcho\"): faild"));
             return false;
         }
         if (NULL == IcmpCloseHandle)
         {
-            OutputDebugString("GetProcAddress(LoadLibrary(\"icmp.dll\"), \"IcmpCloseHandle\"): faild");
+            OutputDebugString(_T("GetProcAddress(LoadLibrary(\"icmp.dll\"), \"IcmpCloseHandle\"): faild"));
             return false;
         }
 
@@ -531,7 +531,7 @@ namespace net
         HANDLE icmp_handle = IcmpCreateFile();
         if (icmp_handle == INVALID_HANDLE_VALUE)
         {
-            OutputDebugString("IcmpCreateFile(): faild");
+            OutputDebugString(_T("IcmpCreateFile(): faild"));
             return false;
         }
 
@@ -1052,7 +1052,7 @@ namespace net_icon
                 HICON icon = load_icon(mii.wID);
                 if (!icon)
                 {
-                    OutputDebugString("LoadImage: faild");
+                    OutputDebugString(_T("LoadImage: faild"));
                     OutputDebugString(make_error_message().c_str());
                     continue;
                 }
@@ -1070,7 +1070,7 @@ namespace net_icon
                 }
                 if (!SetMenuItemInfo(notify_icon_menu, i, TRUE, &mii))
                 {
-                    OutputDebugString("SetMenuItemInfo: faild");
+                    OutputDebugString(_T("SetMenuItemInfo: faild"));
                     OutputDebugString(make_error_message().c_str());
                 }
             }
@@ -1483,7 +1483,7 @@ namespace net_icon
                             }
                             if (!SetMenuItemInfo(notify_icon_menu, i, TRUE, &mii))
                             {
-                                OutputDebugString("SetMenuItemInfo: faild");
+                                OutputDebugString(_T("SetMenuItemInfo: faild"));
                                 OutputDebugString(make_error_message().c_str());
                             }
                         }
@@ -1643,7 +1643,7 @@ namespace net_icon
             }
             else
             {
-                OutputDebugString("CreateWindow: faild");
+                OutputDebugString(_T("CreateWindow: faild"));
                 OutputDebugString(make_error_message().c_str());
             }
         }
