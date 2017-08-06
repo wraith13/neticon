@@ -111,6 +111,10 @@
 #endif
 #endif
 
+#if defined(_MSC_VER)
+#pragma warning(disable: 4996)
+#endif
+
 LPCWSTR application_name = L"ネット アイコン";
 
 //////////////////////////////////////////////////////////////////////////////
