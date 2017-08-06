@@ -1643,7 +1643,7 @@ namespace net_icon
             else
             {
                 interval_str = NULL;
-                interval = 3000;
+                interval = 60 *1000;
             }
             if (interval < 1000)
             {
