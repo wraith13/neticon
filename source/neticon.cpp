@@ -111,10 +111,6 @@
 #endif
 #endif
 
-#if defined(_MSC_VER)
-#pragma warning(disable: 4996)
-#endif
-
 LPCWSTR application_name = L"ネット アイコン";
 
 //////////////////////////////////////////////////////////////////////////////
@@ -250,7 +246,14 @@ public:
     AUTO_OSVERSIONINFO()
     {
         dwOSVersionInfoSize = sizeof(*this);
+#if defined(_MSC_VER)
+#   pragma warning(push)
+#   pragma warning(disable:4996)
+#endif
         GetVersionEx(this);
+#if defined(_MSC_VER)
+#   pragma warning(pop)
+#endif
     }
     bool is_target_or_later(DWORD major_vesion, DWORD minor_version = 0)
     {
@@ -366,10 +369,24 @@ namespace net
 #endif
     addr4_type get_addr4(const char *hostname)
     {
+#if defined(_MSC_VER)
+#   pragma warning(push)
+#   pragma warning(disable:4996)
+#endif
         addr4_type addr = inet_addr(hostname);
+#if defined(_MSC_VER)
+#   pragma warning(pop)
+#endif
         if (INADDR_NONE == addr)
         {
+#if defined(_MSC_VER)
+#   pragma warning(push)
+#   pragma warning(disable:4996)
+#endif
             struct hostent *host_data = gethostbyname(hostname);
+#if defined(_MSC_VER)
+#   pragma warning(pop)
+#endif
             if (host_data) {
                 addr = *((addr4_type *)(host_data->h_addr_list[0]));
             }
@@ -590,10 +607,10 @@ namespace net
         {
             for (addr6_type rp = addr; NULL != rp && !result; rp = rp->ai_next)
             {
-                int socket_handle = socket(rp->ai_family, rp->ai_socktype, rp->ai_protocol);
+                SOCKET socket_handle = socket(rp->ai_family, rp->ai_socktype, rp->ai_protocol);
                 if (0 <= socket_handle)
                 {
-                    if (0 <= connect(socket_handle, rp->ai_addr, rp->ai_addrlen))
+                    if (0 <= connect(socket_handle, rp->ai_addr, (int)(rp->ai_addrlen)))
                     {
                         result = true;
                         shutdown(socket_handle, SD_BOTH);
@@ -605,12 +622,12 @@ namespace net
         return result;
     }
 #endif
-    bool port_scan(addr4_type addr, int portnum)
+    bool port_scan(addr4_type addr, u_short portnum)
     {
         bool result = false;
         if (INADDR_NONE != addr)
         {
-            int socket_handle = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+            SOCKET socket_handle = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
             if (0 <= socket_handle)
             {
                 struct sockaddr_in sai;
@@ -715,7 +732,7 @@ public:
             net::addr4_type addr = net::get_addr4(hostname);
             if (INADDR_NONE != addr)
             {
-                result = net::port_scan(addr, portnum);
+                result = net::port_scan(addr, (u_short)portnum);
             }
 #if defined(NETICON_IPV6_READY)
         }
@@ -886,7 +903,7 @@ BOOL control_notify_icon(DWORD message, HWND owner, UINT id, LPCWSTR caption = N
         sizeof(NOTIFYICONDATA),
         owner,
         id,
-        ((NIM_DELETE != message) ? NIF_MESSAGE: 0) | ((caption) ? NIF_TIP: 0) | ((icon) ? NIF_ICON: 0),
+        (UINT)(((NIM_DELETE != message) ? NIF_MESSAGE: 0) | ((caption) ? NIF_TIP: 0) | ((icon) ? NIF_ICON: 0)),
         WM_NOTIFYICON_BASE +id,
         icon,
     };
@@ -1061,7 +1078,16 @@ namespace net_icon
                     continue;
                 }
                 mii.fMask = MIIM_DATA |MIIM_BITMAP;
+#if defined(_MSC_VER)
+#   pragma warning(push)
+#   pragma warning(disable:4302)
+#   pragma warning(disable:4311)
+#endif
                 mii.dwItemData = (DWORD)icon; // ←mii.hbmpItem でビットマップを使う場合にはいらないが、WM_THEMECHANGED に備えて保存しておく。
+#if defined(_MSC_VER)
+#   pragma warning(pop)
+#endif
+
 #if 0x0600 <= WINVER
                 if (is_enabled_theme)
                 {
@@ -1199,7 +1225,14 @@ namespace net_icon
             {
                 struct timeb now;
                 ftime(&now);
+#if defined(_MSC_VER)
+#   pragma warning(push)
+#   pragma warning(disable:4996)
+#endif
                 const struct tm *tblock = localtime(&now.time);
+#if defined(_MSC_VER)
+#   pragma warning(pop)
+#endif
                 int year = (tblock->tm_year < 70) ? tblock->tm_year +2000: tblock->tm_year +1900;
                 int month = tblock->tm_mon +1;
                 int day = tblock->tm_mday;
