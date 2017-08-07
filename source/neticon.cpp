@@ -937,6 +937,107 @@ BOOL control_notify_icon(DWORD message, HWND owner, UINT id, LPCWSTR caption = N
 
 ///////////////////////////////////////////////////////////////////////////////
 //
+//  çÇDPIëŒâûÅïÉ}ÉãÉ`DPIëŒâû
+//
+
+class dpi_cache
+{
+private:
+    UINT dpi_x;
+    UINT dpi_y; 
+
+public:
+    //typedef HRESULT (WINAPI* GetDpiForMonitor_api_type)(HMONITOR hmonitor, MONITOR_DPI_TYPE dpiType, UINT * dpiX, UINT * dpiY);
+    typedef HRESULT (WINAPI* GetDpiForMonitor_api_type)(HMONITOR hmonitor, int dpiType, UINT * dpiX, UINT * dpiY);
+    GetDpiForMonitor_api_type pGetDpiForMonitor;
+
+    dpi_cache()
+        :dpi_x(96)
+        ,dpi_y(96)
+    {
+        auto user32_dll = rapier::get_module_handle(L"user32.dll");
+        typedef HRESULT (WINAPI* SetProcessDpiAwarenessInternal_api_type)(DWORD);
+        auto pSetProcessDpiAwarenessInternal = (SetProcessDpiAwarenessInternal_api_type)rapier::get_proc_address(user32_dll, "SetProcessDpiAwarenessInternal");
+        if
+        (
+            NULL == pSetProcessDpiAwarenessInternal ||
+            (
+                S_OK != pSetProcessDpiAwarenessInternal(2) &&   // 2 means Process_Per_Monitor_DPI_Aware
+                S_OK != pSetProcessDpiAwarenessInternal(1)      // 1 means Process_Per_Monitor_DPI_Aware
+            )
+        )
+        {
+            typedef BOOL (WINAPI* SetProcessDPIAware_api_type)(void);
+            auto pSetProcessDPIAware = (SetProcessDPIAware_api_type)rapier::get_proc_address(user32_dll, "SetProcessDPIAware");
+            if (NULL != pSetProcessDPIAware)
+            {
+                pSetProcessDPIAware();
+            }
+        }
+    
+        rapier::auto_free_module shcore_dll = rapier::load_library(L"shcore.dll");
+        if (NULL != (HMODULE)shcore_dll)
+        {
+            pGetDpiForMonitor = (GetDpiForMonitor_api_type)rapier::get_proc_address(shcore_dll, "GetDpiForMonitor");
+        }
+        else
+        {
+            pGetDpiForMonitor = nullptr;
+        }
+    }
+
+    bool update(HWND hwnd) // call from WM_CREATE, WM_SETTINGCHANGE, WM_DPICHANGED
+    {
+        UINT old_dpi_x = dpi_x;
+        UINT old_dpi_y = dpi_y;
+        
+        if (nullptr != pGetDpiForMonitor)
+        {
+            pGetDpiForMonitor
+            (
+                MonitorFromWindow
+                (
+                    hwnd,
+                    MONITOR_DEFAULTTONEAREST
+                ),
+                0, // means MDT_EFFECTIVE_DPI
+                &dpi_x,
+                &dpi_y
+            );
+        }
+        else
+        {
+            rapier::auto_release_window_dc dc(hwnd);
+            dpi_x = GetDeviceCaps(dc, LOGPIXELSX);
+            dpi_y = GetDeviceCaps(dc, LOGPIXELSY);
+        }
+        
+        return
+            old_dpi_x != dpi_x ||
+            old_dpi_y != dpi_y;
+    }
+    
+    UINT GetDpiX() const
+    {
+        return dpi_x;
+    }
+    UINT GetDpiY() const
+    {
+        return dpi_y;
+    }
+    double GetRateX() const
+    {
+        return dpi_x /96.0;
+    }
+    double GetRateY() const
+    {
+        return dpi_y /96.0;
+    }
+};
+
+
+///////////////////////////////////////////////////////////////////////////////
+//
 //  net icon
 //
 
@@ -989,6 +1090,11 @@ namespace net_icon
     //
     watch_base *target_net = NULL;
     std::map<DWORD, LPCWSTR> text_table;
+
+    //
+    //  dpi
+    //
+    dpi_cache dpi;
 
     //
     //  thread
@@ -1271,6 +1377,18 @@ namespace net_icon
         return  0;
     }
     
+    void update_dpi(HWND hwnd)
+    {
+        if (dpi.update(hwnd))
+        {
+            //  ...
+        }
+    }
+
+#if !defined(WM_DPICHANGED)
+#define WM_DPICHANGED                   0x02E0
+#endif
+
     LRESULT CALLBACK window_procedure
     (
         HWND hwnd,
@@ -1299,9 +1417,18 @@ namespace net_icon
                     );
                     PostMessage(hwnd, WM_CLOSE, 0, 0);
                 }
+                update_dpi(hwnd);
             }
             break;
 
+        case WM_SETTINGCHANGE:
+            update_dpi(hwnd);
+            break;
+        
+        case WM_DPICHANGED:
+            update_dpi(hwnd);
+            break;
+            
         case WM_MEASUREITEM:
             {
                 MEASUREITEMSTRUCT *mi = (MEASUREITEMSTRUCT*)lParam;
