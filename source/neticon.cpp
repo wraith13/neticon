@@ -955,9 +955,9 @@ public:
         :dpi_x(96)
         ,dpi_y(96)
     {
-        auto user32_dll = rapier::get_module_handle(L"user32.dll");
+        HMODULE user32_dll = GetModuleHandleW(L"user32.dll");
         typedef HRESULT (WINAPI* SetProcessDpiAwarenessInternal_api_type)(DWORD);
-        auto pSetProcessDpiAwarenessInternal = (SetProcessDpiAwarenessInternal_api_type)rapier::get_proc_address(user32_dll, "SetProcessDpiAwarenessInternal");
+        auto pSetProcessDpiAwarenessInternal = (SetProcessDpiAwarenessInternal_api_type)GetProcAddress(user32_dll, "SetProcessDpiAwarenessInternal");
         if
         (
             NULL == pSetProcessDpiAwarenessInternal ||
@@ -968,17 +968,18 @@ public:
         )
         {
             typedef BOOL (WINAPI* SetProcessDPIAware_api_type)(void);
-            auto pSetProcessDPIAware = (SetProcessDPIAware_api_type)rapier::get_proc_address(user32_dll, "SetProcessDPIAware");
+            auto pSetProcessDPIAware = (SetProcessDPIAware_api_type)GetProcAddress(user32_dll, "SetProcessDPIAware");
             if (NULL != pSetProcessDPIAware)
             {
                 pSetProcessDPIAware();
             }
         }
     
-        rapier::auto_free_module shcore_dll = rapier::load_library(L"shcore.dll");
+        HMODULE shcore_dll = LoadLibraryW(L"shcore.dll");
         if (NULL != (HMODULE)shcore_dll)
         {
-            pGetDpiForMonitor = (GetDpiForMonitor_api_type)rapier::get_proc_address(shcore_dll, "GetDpiForMonitor");
+            pGetDpiForMonitor = (GetDpiForMonitor_api_type)GetProcAddress(shcore_dll, "GetDpiForMonitor");
+            FreeLibrary(shcore_dll);
         }
         else
         {
@@ -1007,9 +1008,10 @@ public:
         }
         else
         {
-            rapier::auto_release_window_dc dc(hwnd);
+            HDC dc = GetWindowDC(hwnd);
             dpi_x = GetDeviceCaps(dc, LOGPIXELSX);
             dpi_y = GetDeviceCaps(dc, LOGPIXELSY);
+            ReleaseDC(hwnd, dc);
         }
         
         return
