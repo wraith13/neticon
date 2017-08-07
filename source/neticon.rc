@@ -68,7 +68,7 @@ DEFAULT_NET_ICON        ICON DISCARDABLE "resource\\net.ico"
 DO_START_ICON           ICON DISCARDABLE "resource\\start.ico"
 DO_STOP_ICON            ICON DISCARDABLE "resource\\stop.ico"
 DO_LOG_ICON             ICON DISCARDABLE "resource\\log.ico"
-DO_CLOSE_ICON           ICON DISCARDABLE "resource\\close.ico"
+//DO_CLOSE_ICON           ICON DISCARDABLE "resource\\close.ico"
 
 STATUS_OK_ICON          ICON DISCARDABLE "resource\\ok.ico"
 STATUS_NG_ICON          ICON DISCARDABLE "resource\\ng.ico"

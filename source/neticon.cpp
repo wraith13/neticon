@@ -1058,6 +1058,7 @@ namespace net_icon
     bool on_auto_check = false;
     volatile bool on_output_log = false;
     const UINT TIMER_ID = 100;
+    HMODULE imageres_dll = NULL;
     
     //
     //  notify icon
@@ -1111,9 +1112,19 @@ namespace net_icon
         return IsThemeActive && IsThemeActive();
     }
 #endif
+    inline HICON load_icon(HMODULE module, int id)
+    {
+        return (HICON)LoadImage(module, MAKEINTRESOURCE(id), IMAGE_ICON, smallicon_size.cx, smallicon_size.cy, LR_DEFAULTCOLOR);
+    }
     inline HICON load_icon(int id)
     {
-        return (HICON)LoadImage(hInstance, MAKEINTRESOURCE(id), IMAGE_ICON, smallicon_size.cx, smallicon_size.cy, LR_DEFAULTCOLOR);
+        switch(id)
+        {
+        case DO_CLOSE_ICON:
+            return load_icon(imageres_dll, 5102);
+        default:
+            return load_icon(hInstance, id);
+        }
     }
 
     inline HICON make_status_icon(DWORD icon_id)
@@ -1738,6 +1749,8 @@ namespace net_icon
             IsThemeActive = (BOOL (*)())GetProcAddress(uxtheme_dll, "IsThemeActive");
         }
 #endif
+
+         imageres_dll = LoadLibraryW(L"imageres.dll");
         
         WM_taskbarcreated = RegisterWindowMessageW(L"TaskbarCreated");
         smallicon_size.cx = GetSystemMetrics(SM_CXSMICON);
@@ -1830,6 +1843,7 @@ namespace net_icon
         }
         
         LocalFree(args);
+        FreeLibrary(imageres_dll);
         
 #if 0x0600 <= WINVER
         CoUninitialize();
