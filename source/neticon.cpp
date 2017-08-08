@@ -1058,6 +1058,7 @@ namespace net_icon
     bool on_auto_check = false;
     volatile bool on_output_log = false;
     const UINT TIMER_ID = 100;
+    HMODULE shell32_dll = NULL;
     HMODULE imageres_dll = NULL;
     
     //
@@ -1122,6 +1123,8 @@ namespace net_icon
         {
         case DO_CLOSE_ICON:
             return load_icon(imageres_dll, 5102);
+        case MENU_CHECKMARK_ICON:
+            return load_icon(shell32_dll, 253); // red check
         default:
             return load_icon(hInstance, id);
         }
@@ -1750,7 +1753,8 @@ namespace net_icon
         }
 #endif
 
-         imageres_dll = LoadLibraryW(L"imageres.dll");
+        shell32_dll = GetModuleHandleW(L"shell32.dll");
+        imageres_dll = LoadLibraryW(L"imageres.dll");
         
         WM_taskbarcreated = RegisterWindowMessageW(L"TaskbarCreated");
         smallicon_size.cx = GetSystemMetrics(SM_CXSMICON);

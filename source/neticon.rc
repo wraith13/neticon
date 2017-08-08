@@ -73,7 +73,7 @@ DO_LOG_ICON             ICON DISCARDABLE "resource\\log.ico"
 STATUS_OK_ICON          ICON DISCARDABLE "resource\\ok.ico"
 STATUS_NG_ICON          ICON DISCARDABLE "resource\\ng.ico"
 
-MENU_CHECKMARK_ICON     ICON DISCARDABLE "resource\\check.ico"
+//MENU_CHECKMARK_ICON     ICON DISCARDABLE "resource\\check.ico"
 
 
 ///////////////////////////////////////////////////////////////////////////////
