@@ -62,7 +62,7 @@
 
 APPLICATION_ICON        ICON DISCARDABLE "resource\\neticon.ico"
 
-DEFAULT_NET_ICON        ICON DISCARDABLE "resource\\net.ico"
+//DEFAULT_NET_ICON        ICON DISCARDABLE "resource\\net.ico"
 
 //DO_REFRESH_ICON         ICON DISCARDABLE "resource\\refresh.ico"
 DO_START_ICON           ICON DISCARDABLE "resource\\start.ico"
