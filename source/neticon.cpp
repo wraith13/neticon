@@ -1061,6 +1061,9 @@ namespace net_icon
     HMODULE shell32_dll = NULL;
     HMODULE imageres_dll = NULL;
     
+    int argc;
+    LPWSTR *args;
+
     //
     //  notify icon
     //
@@ -1159,12 +1162,6 @@ namespace net_icon
             MessageBoxW(NULL, buffer, application_name, MB_ICONSTOP |MB_OK);
             return NULL;
         }
-        
-        //
-        //  ステータス表示用アイコンの作成
-        //
-        icon_table[false]     = make_status_icon(STATUS_NG_ICON);
-        icon_table[true]      = make_status_icon(STATUS_OK_ICON);
         
         //
         //  ステータス表示用テキストの準備
@@ -1396,12 +1393,42 @@ namespace net_icon
         }
         return  0;
     }
+
+    void load_base_icon()
+    {
+        if (3 <= argc)
+        {
+            icon_file_name = args[2];
+            if (4 <= argc)
+            {
+                icon_index = args[3];
+                ExtractIconExW(icon_file_name, _wtoi(icon_index), NULL, &base_icon, 1);
+            }
+            else
+            {
+                ExtractIconExW(icon_file_name, 0, NULL, &base_icon, 1);
+            }
+        }
+        else
+        {
+            base_icon = load_icon(DEFAULT_NET_ICON);
+        }
+    }
     
     void update_dpi(HWND hwnd)
     {
         if (dpi.update(hwnd))
         {
-            //  ...
+            smallicon_size.cx = (UINT)(GetSystemMetrics(SM_CXSMICON) *dpi.GetRateX());
+            smallicon_size.cy = (UINT)(GetSystemMetrics(SM_CYSMICON) *dpi.GetRateY());
+
+            load_base_icon();
+
+            //
+            //  ステータス表示用アイコンの作成
+            //
+            icon_table[false]     = make_status_icon(STATUS_NG_ICON);
+            icon_table[true]      = make_status_icon(STATUS_OK_ICON);
         }
     }
 
@@ -1422,6 +1449,7 @@ namespace net_icon
         
         case WM_CREATE:
             {
+                update_dpi(hwnd);
                 if (control_notify_icon(NIM_ADD, hwnd, NOTIFYICON_ID, make_icon_caption(false), base_icon))
                 {
                     PostMessage(hwnd, WM_COMMAND, MAKEWPARAM(DO_START_ICON, 0), NULL);
@@ -1437,7 +1465,6 @@ namespace net_icon
                     );
                     PostMessage(hwnd, WM_CLOSE, 0, 0);
                 }
-                update_dpi(hwnd);
             }
             break;
 
@@ -1764,8 +1791,7 @@ namespace net_icon
         smallicon_size.cx = GetSystemMetrics(SM_CXSMICON);
         smallicon_size.cy = GetSystemMetrics(SM_CYSMICON);
                     
-        int argc;
-        LPWSTR *args = CommandLineToArgvW(GetCommandLineW(), &argc);
+        args = CommandLineToArgvW(GetCommandLineW(), &argc);
         
         this_file_name = args[0];
 
@@ -1805,24 +1831,6 @@ namespace net_icon
                 ansi_host_name[i] = (char)(host_name[i]);
             }
             while(ansi_host_name[i++]);
-            
-            if (3 <= argc)
-            {
-                icon_file_name = args[2];
-                if (4 <= argc)
-                {
-                    icon_index = args[3];
-                    ExtractIconExW(icon_file_name, _wtoi(icon_index), NULL, &base_icon, 1);
-                }
-                else
-                {
-                    ExtractIconExW(icon_file_name, 0, NULL, &base_icon, 1);
-                }
-            }
-            else
-            {
-                base_icon = load_icon(DEFAULT_NET_ICON);
-            }
             
             if (regist() && create())
             {
