@@ -797,7 +797,7 @@ HICON create_merge_icon(SIZE icon_size, HICON icon1, HICON icon2)
 // アルファが黒ずむ問題の仮対策(お茶濁し)バージョン
     // Windows XP で ILC_COLOR32 を指定するとオーバーレイイメージが被る部分が欠けたりする・・・なぜ？
     HIMAGELIST source_image = ImageList_Create(icon_size.cx, icon_size.cy, ILC_COLOR24 |ILC_MASK, 2, 1);
-    ImageList_SetBkColor(source_image, 0x00DDDDDD);
+    ImageList_SetBkColor(source_image, 0x00444444);
 #endif
     ImageList_AddIcon(source_image, icon1);
     ImageList_AddIcon(source_image, icon2);
