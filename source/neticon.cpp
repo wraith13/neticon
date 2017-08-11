@@ -479,7 +479,7 @@ namespace net
         //
         //  ...
         //
-        bool result = dwStatus;
+        bool result = 0 != dwStatus;
         if (result)
         {
 #if 0
@@ -575,7 +575,7 @@ namespace net
         //
         //  ...
         //
-        bool result = dwStatus;
+        bool result = 0 != dwStatus;
         if (result)
         {
             if (RTT)
