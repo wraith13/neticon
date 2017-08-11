@@ -1415,20 +1415,25 @@ namespace net_icon
         }
     }
     
+    void update_icon()
+    {
+        smallicon_size.cx = (UINT)(GetSystemMetrics(SM_CXSMICON) *dpi.GetRateX());
+        smallicon_size.cy = (UINT)(GetSystemMetrics(SM_CYSMICON) *dpi.GetRateY());
+
+        load_base_icon();
+
+        //
+        //  ステータス表示用アイコンの作成
+        //
+        icon_table[false]     = make_status_icon(STATUS_NG_ICON);
+        icon_table[true]      = make_status_icon(STATUS_OK_ICON);
+    }
+
     void update_dpi(HWND hwnd)
     {
         if (dpi.update(hwnd))
         {
-            smallicon_size.cx = (UINT)(GetSystemMetrics(SM_CXSMICON) *dpi.GetRateX());
-            smallicon_size.cy = (UINT)(GetSystemMetrics(SM_CYSMICON) *dpi.GetRateY());
-
-            load_base_icon();
-
-            //
-            //  ステータス表示用アイコンの作成
-            //
-            icon_table[false]     = make_status_icon(STATUS_NG_ICON);
-            icon_table[true]      = make_status_icon(STATUS_OK_ICON);
+            update_icon();
         }
     }
 
@@ -1449,7 +1454,8 @@ namespace net_icon
         
         case WM_CREATE:
             {
-                update_dpi(hwnd);
+                dpi.update(hwnd);
+                update_icon();
                 if (control_notify_icon(NIM_ADD, hwnd, NOTIFYICON_ID, make_icon_caption(false), base_icon))
                 {
                     PostMessage(hwnd, WM_COMMAND, MAKEWPARAM(DO_START_ICON, 0), NULL);
