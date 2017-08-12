@@ -5,7 +5,7 @@
 ## ライセンス
 
 Boost Software License - Version 1.0 を採用しています。
-詳細は [`.\LICENSE_1_0.txt`](.\LICENSE_1_0.txt) を参照してください。
+詳細は [.\LICENSE_1_0.txt](.\LICENSE_1_0.txt) を参照してください。
 
 日本語参考訳: http://hamigaki.sourceforge.jp/doc/html/license.html
 
