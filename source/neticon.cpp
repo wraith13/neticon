@@ -1202,6 +1202,7 @@ namespace net_icon
                 {
                     OutputDebugString(_T("LoadImage: faild"));
                     OutputDebugString(make_error_message().c_str());
+                    ++i;
                     continue;
                 }
                 mii.fMask = MIIM_DATA |MIIM_BITMAP;
