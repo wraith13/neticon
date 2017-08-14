@@ -1124,6 +1124,10 @@ namespace net_icon
     {
         switch(id)
         {
+        case DO_START_ICON:
+            return load_icon(shell32_dll, 23);
+        case DO_STOP_ICON:
+            return load_icon(shell32_dll, 200);
         case DEFAULT_NET_ICON:
             return load_icon(shell32_dll, 14);
         case DO_LOG_ICON:
