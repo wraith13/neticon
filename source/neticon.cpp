@@ -787,7 +787,7 @@ UINT get_ILC_color_flag(HDC dc)
 //  アイコン
 //
 
-HICON create_merge_icon(SIZE icon_size, HICON icon1, HICON icon2)
+HICON create_merge_icon(SIZE icon_size, HICON icon1, HICON icon2, COLORREF backgroud_color)
 {
 #if 0
 // アルファが黒ずむバージョン
@@ -797,7 +797,7 @@ HICON create_merge_icon(SIZE icon_size, HICON icon1, HICON icon2)
 // アルファが黒ずむ問題の仮対策(お茶濁し)バージョン
     // Windows XP で ILC_COLOR32 を指定するとオーバーレイイメージが被る部分が欠けたりする・・・なぜ？
     HIMAGELIST source_image = ImageList_Create(icon_size.cx, icon_size.cy, ILC_COLOR24 |ILC_MASK, 2, 1);
-    ImageList_SetBkColor(source_image, 0x00444444);
+    ImageList_SetBkColor(source_image, backgroud_color);
 #endif
     ImageList_AddIcon(source_image, icon1);
     ImageList_AddIcon(source_image, icon2);
@@ -1120,14 +1120,19 @@ namespace net_icon
     {
         return (HICON)LoadImage(module, MAKEINTRESOURCE(id), IMAGE_ICON, smallicon_size.cx, smallicon_size.cy, LR_DEFAULTCOLOR);
     }
+    inline HICON remove_icon_alpha(HICON icon)
+    {
+        //  アイコンマージ処理で alpha が適切に処理されない問題を利用して、メニューの初期状態で酷い状態になる問題を回避
+        return create_merge_icon(smallicon_size, icon, icon, 0x00DDDDDD);
+    }
     inline HICON load_icon(int id)
     {
         switch(id)
         {
         case DO_START_ICON:
-            return load_icon(shell32_dll, 23);
+            return remove_icon_alpha(load_icon(shell32_dll, 23));
         case DO_STOP_ICON:
-            return load_icon(shell32_dll, 200);
+            return remove_icon_alpha(load_icon(shell32_dll, 200));
         case DEFAULT_NET_ICON:
             return load_icon(shell32_dll, 14);
         case DO_LOG_ICON:
@@ -1143,7 +1148,7 @@ namespace net_icon
 
     inline HICON make_status_icon(DWORD icon_id)
     {
-        return create_merge_icon(smallicon_size, base_icon, load_icon(icon_id));
+        return create_merge_icon(smallicon_size, base_icon, load_icon(icon_id), 0x00444444);
     }
     HWND create()
     {
