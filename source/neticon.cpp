@@ -1134,7 +1134,7 @@ namespace net_icon
         case DO_STOP_ICON:
             return remove_icon_alpha(load_icon(shell32_dll, 200));
         case DEFAULT_NET_ICON:
-            return load_icon(shell32_dll, 14);
+            return load_icon(APPLICATION_ICON);
         case DO_LOG_ICON:
             return load_icon(shell32_dll, 21);
         case DO_CLOSE_ICON:
