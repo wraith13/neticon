@@ -1,6 +1,38 @@
 # neticon
 サーバーの稼働状態を Windows のタスクバーの通知領域上のアイコンで監視する為のツールです。
 
+## ビルド方法
+
+### 前準備
+
+* [Visual Studio](https://www.visualstudio.com/)
+* [solomon](https://github.com/wraith13/solomon)
+
+Visual Studio のインストールは C++ コンパイラと Windows SDK が含まれるようにしてください。
+Visual Studio 2017 より新しい Visual Studio や通常と異なるパスにインストールした場合などは `.\source\solomon\conf\config.%COMPUTERNAME%.cmd` を作成し
+
+> @SET VCVARSALL_PATH=C:\Program Files\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvarsall.bat
+
+といった感じで vcvarsall.bat のパスを指定してください。
+
+solomon についてはこのプロジェクトのローカルコピーのパスが `C:\github\wraith13\neticon` である場合に  `C:\github\wraith13\solomon` のように隣にローカルコピーを用意する分には設定の必要はありませんがそれ以外のパスに用意した場合は `.\source\solomon\conf\config.%COMPUTERNAME%.cmd` を作成し
+
+> @REM solomon\cmd\main.cmd のパス
+> @SET SOLOMON_MAIN_CMD=%~dp0..\..\..\..\solomon\cmd\main.cmd
+
+といった感じで solomon の main.cmd のパスを指定してください。
+
+
+### ビルドの実行
+
+コマンド プロンプトから `.\source\solomon\build.cmd` を実行します。正常にビルドが完了すれば コマンド プロンプト の文字が緑色になり `.\snapshot\result\` にビルドされたバイナリがビルドのタイプ別に出力されます。
+
+ `.\source\solomon\auto.build.cmd` を実行しておくと `.\source\` ディレクトリ下の変更を検知しファイルが更新される度に自動的にビルドが実行されます。
+
+### リリース用パッケージの作成
+
+WIP
+
 ## ファイル/ディレクトリ構成
 
 ### .\readme.md
@@ -24,7 +56,7 @@
 
 solomon によって作成されるディレクトリです。
 
-### .\snapshot\result\master\
+### .\snapshot\master\
 
 solomon がビルド時に .\source\ ディレクトリをミラーしたディレクトリです。
 .\testsnap\ ディレクトリへは .\source\ から直接ミラーされるのではなく、こちらのディレクトリから間接的にミラーされます。
