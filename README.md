@@ -5,20 +5,21 @@
 
 ### 前準備
 
-* [Visual Studio](https://www.visualstudio.com/)
-* [solomon](https://github.com/wraith13/solomon)
+#### [Visual Studio](https://www.visualstudio.com/)
 
 Visual Studio のインストールは C++ コンパイラと Windows SDK が含まれるようにしてください。
 Visual Studio 2017 より新しい Visual Studio や通常と異なるパスにインストールした場合などは `.\source\solomon\conf\config.%COMPUTERNAME%.cmd` を作成し
 
-> @SET VCVARSALL_PATH=C:\Program Files\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvarsall.bat
+> `@SET VCVARSALL_PATH=C:\Program Files\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvarsall.bat`
 
 といった感じで vcvarsall.bat のパスを指定してください。
 
+
+#### [solomon](https://github.com/wraith13/solomon)
+
 solomon についてはこのプロジェクトのローカルコピーのパスが `C:\github\wraith13\neticon` である場合に  `C:\github\wraith13\solomon` のように隣にローカルコピーを用意する分には設定の必要はありませんがそれ以外のパスに用意した場合は `.\source\solomon\conf\config.%COMPUTERNAME%.cmd` を作成し
 
-> @REM solomon\cmd\main.cmd のパス
-> @SET SOLOMON_MAIN_CMD=%~dp0..\..\..\..\solomon\cmd\main.cmd
+> `@SET SOLOMON_MAIN_CMD=%~dp0..\..\..\..\solomon\cmd\main.cmd`
 
 といった感じで solomon の main.cmd のパスを指定してください。
 
@@ -31,7 +32,7 @@ solomon についてはこのプロジェクトのローカルコピーのパス
 
 ### リリース用パッケージの作成
 
-WIP
+事前にビルドを行った上で、コマンド プロンプトから `.\make.release.package.cmd` を実行すると `.\release\` ディレクトリにリリース用パッケージが作成されます。
 
 ## ファイル/ディレクトリ構成
 
