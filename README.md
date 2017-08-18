@@ -7,7 +7,17 @@
 
 > `neticon.exe` [リモートホスト名[:ポート番号][@監視間隔(秒単位)] [アイコンファイル名 [アイコンインデックス値]]]
 
-Windows のログイン時に自動的に起動するような仕組みは作ってないので必要に応じて <kbd>田</kbd>+<kbd>R</kbd> から `shell:startup` を開いてショートカットを登録してください。
+Windows のログイン時に自動的に起動するような仕組みは作ってないので必要に応じて [ファイル名を指定して実行] ( [田]+[R] ) から `shell:startup` を開いてショートカットを登録してください。
+
+### 使用例
+
+>`neticon.exe github.com`
+
+60秒ごとに github.com を ping で生死確認。通知領域のアイコンには default のモノを使用。
+
+>`neticon.exe twitter.com:443@90 twitter.ico`
+
+90秒ごとに twitter.com の 443 番ポートにアクセスして生死確認。通知領域のアイコンには twitter.ico を使用。
 
 ## ビルド方法
 
