@@ -68,7 +68,8 @@
 #define DO_START_ICON           202
 #define DO_STOP_ICON            203
 #define DO_LOG_ICON             204
-#define DO_CLOSE_ICON           205
+#define DO_VERSION_INFO         205
+#define DO_CLOSE_ICON           206
 
 #define STATUS_OK_ICON          301
 #define STATUS_NG_ICON          302

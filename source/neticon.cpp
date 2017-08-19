@@ -111,7 +111,7 @@
 #endif
 #endif
 
-LPCWSTR application_name = L"ネット アイコン";
+LPCWSTR application_name = L"neticon";
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -1059,6 +1059,7 @@ namespace net_icon
     volatile bool on_output_log = false;
     const UINT TIMER_ID = 100;
     HMODULE shell32_dll = NULL;
+    HMODULE user32_dll = NULL;
     HMODULE imageres_dll = NULL;
     
     int argc;
@@ -1137,6 +1138,8 @@ namespace net_icon
             return load_icon(APPLICATION_ICON);
         case DO_LOG_ICON:
             return load_icon(shell32_dll, 21);
+        case DO_VERSION_INFO:
+            return load_icon(user32_dll, 104);
         case DO_CLOSE_ICON:
             return load_icon(imageres_dll, 5102);
         case MENU_CHECKMARK_ICON:
@@ -1630,6 +1633,24 @@ namespace net_icon
                 }
                 break;
                 
+            case DO_VERSION_INFO:
+                {
+                    WCHAR filename[1024];
+                    GetModuleFileNameW(hInstance, filename, ARRAY_SIZE(filename) -1);
+                    MessageBoxW
+                    (
+                        hwnd,
+                        (
+                            std::wstring(application_name) +L" " +VERSION_WSTRING +L"\r\n"
+                            +L"\r\n"
+                            +filename
+                        ).c_str(),
+                        L"バージョン情報",
+                        MB_ICONINFORMATION |MB_OK
+                    );
+                }
+                break;
+                
             case DO_CLOSE_ICON:
                 PostMessage(hwnd, WM_CLOSE, 0, 0);
                 break;
@@ -1801,6 +1822,7 @@ namespace net_icon
 #endif
 
         shell32_dll = GetModuleHandleW(L"shell32.dll");
+        user32_dll = GetModuleHandleW(L"user32.dll");
         imageres_dll = LoadLibraryW(L"imageres.dll");
         
         WM_taskbarcreated = RegisterWindowMessageW(L"TaskbarCreated");

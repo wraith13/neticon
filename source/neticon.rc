@@ -92,6 +92,8 @@ NOTIFYICON_MENU MENU
         MENUITEM SEPARATOR
         MENUITEM "OutputDebugString(&Log)", DO_LOG_ICON
         MENUITEM SEPARATOR
+        MENUITEM "バージョン情報(&V)", DO_VERSION_INFO
+        MENUITEM SEPARATOR
         MENUITEM "終了(&X)", DO_CLOSE_ICON
     }
 }
