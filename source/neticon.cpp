@@ -1131,9 +1131,9 @@ namespace net_icon
         switch(id)
         {
         case DO_START_ICON:
-            return remove_icon_alpha(load_icon(shell32_dll, 23));
+            return load_icon(shell32_dll, 23);
         case DO_STOP_ICON:
-            return remove_icon_alpha(load_icon(shell32_dll, 200));
+            return load_icon(shell32_dll, 200);
         case DEFAULT_NET_ICON:
             return load_icon(APPLICATION_ICON);
         case DO_LOG_ICON:
@@ -1184,7 +1184,7 @@ namespace net_icon
         //
         //  メニュー用アイコンの設定
         //
-        checkmark_icon = load_icon(MENU_CHECKMARK_ICON);
+        checkmark_icon = remove_icon_alpha(load_icon(MENU_CHECKMARK_ICON));
         HMENU window_menu = LoadMenu(hInstance, MAKEINTRESOURCE(NOTIFYICON_MENU));
         HMENU notify_icon_menu = GetSubMenu(window_menu, 0);
         MENUITEMINFO mii = { sizeof(MENUITEMINFO), };
@@ -1205,7 +1205,7 @@ namespace net_icon
                 MFT_SEPARATOR != (mii.fType &MFT_SEPARATOR)
             )
             {
-                HICON icon = load_icon(mii.wID);
+                HICON icon = remove_icon_alpha(load_icon(mii.wID));
                 if (!icon)
                 {
                     OutputDebugString(_T("LoadImage: faild"));
