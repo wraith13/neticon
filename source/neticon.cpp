@@ -646,22 +646,29 @@ namespace net
     }
 }
 
+enum net_status_type
+{
+    net_status_null = 0,
+    net_status_ng,
+    net_status_ok,
+};
+
 class watch_base
 {
 public:
-    bool last_result;
-    watch_base() :last_result(false)
+    net_status_type last_result;
+    watch_base() :last_result(net_status_null)
     {
     }
     virtual ~watch_base()
     {
     }
     
-    bool check()
+    net_status_type check()
     {
         return last_result = check_target();
     }
-    virtual bool check_target() = 0;
+    virtual net_status_type check_target() = 0;
 };
 
 
@@ -672,9 +679,9 @@ public:
     ping_watch(LPCSTR a_hostname) :hostname(a_hostname)
     {
     }
-    bool check_target()
+    net_status_type check_target()
     {
-        bool result = false;
+        net_status_type result = net_status_ng;
 #if 0 && defined(NETICON_IPV6_READY)
 //  このプログラムの IPv6 ベースの ping はまだ不安定なので ping に関してはしばし IPv4 固定のままにしておく。
         if (AUTO_OSVERSIONINFO().is_windows_xp_or_later())
@@ -685,7 +692,7 @@ public:
                 net::addr6_type to_addr = net::get_addr6(hostname);
                 if (NULL != to_addr)
                 {
-                    result = net::ping(from_addr, to_addr, 1500);
+                    result = net::ping(from_addr, to_addr, 1500) ? net_status_ok: net_status_ng;
                     freeaddrinfo(to_addr);
                 }
                 freeaddrinfo(from_addr);
@@ -697,7 +704,7 @@ public:
             net::addr4_type addr = net::get_addr4(hostname);
             if (INADDR_NONE != addr)
             {
-                result = net::ping(addr, 1500);
+                result = net::ping(addr, 1500) ? net_status_ok: net_status_ng;
             }
 #if 0 && defined(NETICON_IPV6_READY)
 //  このプログラムの IPv6 ベースの ping はまだ不安定なので ping に関してはしばし IPv4 固定のままにしておく。
@@ -713,16 +720,16 @@ public:
     port_watch(LPCSTR a_hostname, UINT a_portnum) :ping_watch(a_hostname), portnum(a_portnum)
     {
     }
-    bool check_target()
+    net_status_type check_target()
     {
-        bool result = false;
+        net_status_type result = net_status_ng;
 #if defined(NETICON_IPV6_READY)
         if (AUTO_OSVERSIONINFO().is_windows_xp_or_later())
         {
             net::addr6_type addr = net::get_addr6(hostname, portnum);
             if (NULL != addr)
             {
-                result = net::port_scan(addr);
+                result = net::port_scan(addr) ? net_status_ok: net_status_ng;
                 freeaddrinfo(addr);
             }
         }
@@ -732,7 +739,7 @@ public:
             net::addr4_type addr = net::get_addr4(hostname);
             if (INADDR_NONE != addr)
             {
-                result = net::port_scan(addr, (u_short)portnum);
+                result = net::port_scan(addr, (u_short)portnum) ? net_status_ok: net_status_ng;
             }
 #if defined(NETICON_IPV6_READY)
         }
@@ -1090,14 +1097,14 @@ namespace net_icon
     //
     SIZE smallicon_size;
     HICON base_icon = NULL;
-    std::map<DWORD, HICON> icon_table;
+    std::map<net_status_type, HICON> icon_table;
     HICON checkmark_icon = NULL;
     
     //
     //  net
     //
     watch_base *target_net = NULL;
-    std::map<DWORD, LPCWSTR> text_table;
+    std::map<net_status_type, LPCWSTR> text_table;
 
     //
     //  dpi
@@ -1178,8 +1185,9 @@ namespace net_icon
         //
         //  ステータス表示用テキストの準備
         //
-        text_table[false]     = L"[NG]";
-        text_table[true]      = L"[OK]";
+        text_table[net_status_null] = L"[N/A]";
+        text_table[net_status_ng]   = L"[NG]";
+        text_table[net_status_ok]   = L"[OK]";
         
         //
         //  メニュー用アイコンの設定
@@ -1265,7 +1273,7 @@ namespace net_icon
     //
     //  通知アイコンTIP用テキストの作成
     //
-    LPCWSTR make_icon_caption(DWORD current_status)
+    LPCWSTR make_icon_caption(net_status_type current_status)
     {
         //const int max_caption_length = 64; // ARRAYA_SIZE(((NOTIFYICONDATA*)0)->szTip);
         //  シェルのバージョンによっては128文字まで扱えることになっているのだが
@@ -1278,7 +1286,7 @@ namespace net_icon
             display_message += L":";
             display_message += port_str;
         }
-        std::map<DWORD, LPCWSTR>::const_iterator text_i = text_table.find(current_status);
+        std::map<net_status_type, LPCWSTR>::const_iterator text_i = text_table.find(current_status);
         if (text_i != text_table.end())
         {
             display_message = text_i->second +(L" " +display_message);
@@ -1304,9 +1312,9 @@ namespace net_icon
     //
     //  通知アイコン用アイコンの取得
     //
-    HICON get_status_icon(DWORD status)
+    HICON get_status_icon(net_status_type status)
     {
-        std::map<DWORD, HICON>::const_iterator icon_i = icon_table.find(status);
+        std::map<net_status_type, HICON>::const_iterator icon_i = icon_table.find(status);
         if (icon_i != icon_table.end())
         {
             return icon_i->second;
@@ -1320,7 +1328,7 @@ namespace net_icon
     //
     //  通知アイコンの更新
     //
-    void update_status(HWND hwnd, bool current_status)
+    void update_status(HWND hwnd, net_status_type current_status)
     {
         //
         //  通知アイコンの更新
@@ -1438,8 +1446,9 @@ namespace net_icon
         //
         //  ステータス表示用アイコンの作成
         //
-        icon_table[false]     = make_status_icon(STATUS_NG_ICON);
-        icon_table[true]      = make_status_icon(STATUS_OK_ICON);
+        icon_table[net_status_null] = base_icon;
+        icon_table[net_status_ng]   = make_status_icon(STATUS_NG_ICON);
+        icon_table[net_status_ok]   = make_status_icon(STATUS_OK_ICON);
     }
 
     void update_dpi(HWND hwnd)
@@ -1469,7 +1478,7 @@ namespace net_icon
             {
                 dpi.update(hwnd);
                 update_icon();
-                if (control_notify_icon(NIM_ADD, hwnd, NOTIFYICON_ID, make_icon_caption(false), base_icon))
+                if (control_notify_icon(NIM_ADD, hwnd, NOTIFYICON_ID, make_icon_caption(net_status_null), base_icon))
                 {
                     PostMessage(hwnd, WM_COMMAND, MAKEWPARAM(DO_START_ICON, 0), NULL);
                 }
@@ -1621,7 +1630,7 @@ namespace net_icon
                 purge_thread();
                 on_auto_check = false;
                 update_menu_status(hwnd);
-                control_notify_icon(NIM_MODIFY, hwnd, NOTIFYICON_ID, make_icon_caption(false), base_icon);
+                control_notify_icon(NIM_MODIFY, hwnd, NOTIFYICON_ID, make_icon_caption(net_status_null), base_icon);
                 break;
                 
             case DO_LOG_ICON:
