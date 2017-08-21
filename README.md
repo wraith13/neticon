@@ -19,7 +19,9 @@ Windows のログイン時に自動的に起動するような仕組みは作っ
 
 >`neticon.exe twitter.com:443@90 twitter.ico`
 
-90秒ごとに twitter.com の 443 番ポートにアクセスして生死確認。通知領域のアイコンには twitter.ico を使用。
+90秒ごとに twitter.com の 443 番ポートにアクセスして生死確認。通知領域のアイコンには twitter.ico を使用(※)。
+
+※ default 以外のアイコンを使用する場合は自前でアイコンファイルを用意するなり shell32.dll, imageres.dll あたりのヤツを参照するなりしてください。
 
 ## ビルド方法
 
