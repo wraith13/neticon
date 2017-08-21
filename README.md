@@ -1,5 +1,7 @@
-# neticon
+# ![](./screenshot/neticon.32x32.png) neticon
+
 サーバーの稼働状態を Windows のタスクバーの通知領域上のアイコンで監視する為のツールです。
+![](./screenshot/taskbar.png)
 
 ## 使用方法
 
