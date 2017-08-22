@@ -13,11 +13,15 @@ Windows のログイン時に自動的に起動するような仕組みは作っ
 
 ### 使用例
 
->`neticon.exe github.com`
+```cmd
+neticon.exe github.com
+```
 
 60秒ごとに github.com を ping で生死確認。通知領域のアイコンには default のモノを使用。
 
->`neticon.exe twitter.com:443@90 twitter.ico`
+```cmd
+neticon.exe twitter.com:443@90 twitter.ico
+```
 
 90秒ごとに twitter.com の 443 番ポートにアクセスして生死確認。通知領域のアイコンには twitter.ico を使用(※)。
 
@@ -32,7 +36,9 @@ Windows のログイン時に自動的に起動するような仕組みは作っ
 Visual Studio のインストールは C++ コンパイラと Windows SDK が含まれるようにしてください。
 Visual Studio 2017 より新しい Visual Studio や通常と異なるパスにインストールした場合などは `.\source\solomon\conf\config.%COMPUTERNAME%.cmd` を作成し
 
-> `@SET VCVARSALL_PATH=C:\Program Files\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvarsall.bat`
+```cmd
+@SET VCVARSALL_PATH=C:\Program Files\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvarsall.bat
+```
 
 といった感じで vcvarsall.bat のパスを指定してください。
 
@@ -41,7 +47,9 @@ Visual Studio 2017 より新しい Visual Studio や通常と異なるパスに�
 
 solomon についてはこのプロジェクトのローカルコピーのパスが `C:\github\wraith13\neticon` である場合に  `C:\github\wraith13\solomon` のように隣にローカルコピーを用意する分には設定の必要はありませんがそれ以外のパスに用意した場合は `.\source\solomon\conf\config.%COMPUTERNAME%.cmd` を作成し
 
-> `@SET SOLOMON_MAIN_CMD=%~dp0..\..\..\..\solomon\cmd\main.cmd`
+```cmd
+@SET SOLOMON_MAIN_CMD=%~dp0..\..\..\..\solomon\cmd\main.cmd
+```
 
 といった感じで solomon の main.cmd のパスを指定してください。
 
