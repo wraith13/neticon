@@ -44,6 +44,7 @@ Visual Studio 2017 より新しい Visual Studio や通常と異なるパスに�
 
 といった感じで vcvarsall.bat のパスを指定してください。
 
+> 非推奨となりますが、その他の C++ コンパイラでもビルドすることは可能です。 Borland C++ Compiler でのビルドは[こちら](#solomon-を使わない-borland-C-Compiler-でのビルド非推奨)を参照してください。 gcc あたりでのビルドもやろうと思えばできると思いますが、コンパイラオプション等々はご自身で調べてください。
 
 #### [solomon](https://github.com/wraith13/solomon)
 
@@ -55,6 +56,7 @@ solomon についてはこのプロジェクトのローカルコピーのパス
 
 といった感じで solomon の main.cmd のパスを指定してください。
 
+> 非推奨となりますが、 solomon がなくともビルドすることは可能です。詳細は[こちら](#solomon-を使わない-VC-でのビルド非推奨)を参照してください。
 
 ### ビルドの実行
 
@@ -82,6 +84,62 @@ solomon についてはこのプロジェクトのローカルコピーのパス
 .\make.release.package.cmd
 ```
 
+### solomon を使わない VC でのビルド(非推奨)
+
+最初に `.\source\solomon\build\subcmd\build.cmd` の内容を次のように書き換えます。
+
+```cmd
+@REM
+@REM build
+@REM
+
+@SETLOCAL
+@CALL "%CALL_VCVARSALL_CMD%" %VCVARSALL_ARG% >NUL
+
+@REM リソースコンパイル
+rc %NETICON_MACRO% .\neticon.rc
+
+@REM 通常コンパイル
+cl ".\neticon.cpp" %VC_CL_ARG% %NETICON_MACRO% /EHsc /MP /W4 /Feneticon.exe /link %VCLINKER_ARG% neticon.res
+
+@ENDLOCAL
+```
+
+上の書き換えが済んだ上で、次のいずれかの cmd を実行してください。
+
+```cmd
+".\source\solomon\build\debug x86 ansi.cmd"
+```
+
+```cmd
+".\source\solomon\build\release x64 unicode.cmd"
+```
+
+```cmd
+".\source\solomon\build\release x86 unicode.cmd"
+```
+
+ビルドに成功すると `.\source\neticon.exe` が作成されます。
+
+> 必要応じて `.\source\solomon\build\subcmd\increment.version.cmd` を実行するか、あるいは手作業で `VERSION.cmd` 内のビルド番号をインクリメントしてください。 solomon でのビルジ時は全てのビルドに成功すると自動的に `.\source\solomon\build\subcmd\increment.version.cmd` が呼び出されます。
+
+### solomon を使わない Borland C++ Compiler でのビルド(非推奨)
+
+`.\source\BUILD.h` の内容を次のように書き換えます。( BUILD の定義は区別が基本的になんでも構いません。 )
+
+```c++
+#define BUILD Borland Build
+```
+
+`.\source\VERSION.h` の内容を手業で編集しバージョン情報を設定してください。
+
+以上の前準備が済めば次のコマンドでビルドできます。( Borland C++ Compiler のパス設定やライブラリパス等々の設定が済んでる前提 )
+
+```cmd
+bcc32 -tWM -O1 -c neticon.cpp
+brcc32 neticon.rc
+ilink32 -aa neticon.obj, neticon.exe, , c0w32.obj import32.lib cw32mt.lib, , neticon.res
+```
 
 ## ファイル/ディレクトリ構成
 
