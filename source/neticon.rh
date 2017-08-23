@@ -22,8 +22,8 @@
 #if defined(__cplusplus) &&  201103L <= __cplusplus
 # define RC_TO_WSTRING_BODY(X) L""#X
 #else
-#define RC_TO_WSTRING_BODY(X) L#X
-# endif
+# define RC_TO_WSTRING_BODY(X) L#X
+#endif
 #define RC_TO_WSTRING(X) RC_TO_WSTRING_BODY(X)
 
 #define VERSION_STRING RC_TO_STRING(VERSION_MAJOR) "." RC_TO_STRING(VERSION_MINOR) "." RC_TO_STRING(VERSION_BUILD) " " RC_TO_STRING(BUILD)
