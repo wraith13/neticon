@@ -21,11 +21,10 @@ $(TARGET) : $(OBJS)
 .rc.res :
 	windres -c cp932 -O coff -I. $< -o $@
 
-neticon.cpp : .VERSION.h
+neticon.cpp : VERSION.h
 
-.VERSION.h :
-	mv VERSION.h .VERSION.h
-	iconv -f utf-8 -t cp932 .VERSION.h > VERSION.h
+VERSION.h : VERSION.cmd
+	cat VERSION.cmd | grep VERSION_ | awk '{print $$2}' | sed 's/=/ /' | xargs -i -n 1 echo "#define {}" > VERSION.h
 
 clean :
-	rm -f *.o $(TARGET)
+	rm -f *.o $(TARGET) VERSION.h
