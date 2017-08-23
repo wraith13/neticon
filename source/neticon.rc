@@ -75,8 +75,8 @@ NOTIFYICON_MENU MENU
 //
 
 1 VERSIONINFO
-FILEVERSION 1, 0, 4, 0
-PRODUCTVERSION 1, 0, 4, 0
+FILEVERSION VERSION_MAJOR, VERSION_MINOR, VERSION_BUILD, 0
+PRODUCTVERSION VERSION_MAJOR, VERSION_MINOR, VERSION_BUILD, 0
 FILEOS 0x00010004L // == VOS__WINDOWS32
 FILETYPE 0x00000001L // == VFT_APP
 {
@@ -84,14 +84,14 @@ FILETYPE 0x00000001L // == VFT_APP
  {
   BLOCK "041104B0"
   {
-   VALUE "Comments", "http://tricklib.com/cxx/ex/neticon/\000"
+   VALUE "Comments", "https://github.com/wraith13/neticon/\000"
    VALUE "CompanyName", "TrickPalace\000"
-   VALUE "FileDescription", "Net Icon\000"
+   VALUE "FileDescription", "neticon\000"
    VALUE "FileVersion", VERSION_STRING "\000"
-   VALUE "InternalName", "Net Icon\000"
-   VALUE "LegalCopyright", "Copyright (C) 2007,2008 Wraith the Trickster.\000"
+   VALUE "InternalName", "neticon\000"
+   VALUE "LegalCopyright", "Copyright (C) 2007-2017 Wraith the Trickster.\000"
    VALUE "OriginalFilename", "neticon.exe\000"
-   VALUE "ProductName", "Net Icon\000"
+   VALUE "ProductName", "neticon\000"
    VALUE "ProductVersion", VERSION_STRING "\000"
   }
 
