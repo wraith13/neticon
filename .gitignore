@@ -37,3 +37,4 @@ snapshot
 release
 
 source/VERSION.h
+source/BUILD.h

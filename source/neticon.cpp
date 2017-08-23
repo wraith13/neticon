@@ -68,6 +68,10 @@
 #pragma comment(lib, "ws2_32.lib")
 #endif
 
+#define INTERNET_OPEN_TYPE_PRECONFIG 0
+#define HTTP_QUERY_STATUS_CODE 19
+#define HTTP_QUERY_FLAG_NUMBER 0x20000000
+
 #if defined(_MSC_VER)
 #pragma comment(lib, "ws2_32.lib")
 #pragma comment(lib, "comctl32.lib")
@@ -270,6 +274,7 @@ namespace net
     
     HINSTANCE icmp_lib = NULL;
     HINSTANCE iphlpapi_lib = NULL;
+    HINSTANCE wininet_lib = NULL;
     
     typedef HANDLE  (WINAPI* IcmpCreateFile_PROC_TYPE)  (VOID);
     typedef DWORD   (WINAPI* IcmpSendEcho_PROC_TYPE)    (HANDLE, DWORD, LPVOID, WORD, PIP_OPTION_INFORMATION, LPVOID, DWORD, DWORD);
@@ -278,10 +283,21 @@ namespace net
     IcmpSendEcho_PROC_TYPE      IcmpSendEcho    = NULL;
     IcmpCloseHandle_PROC_TYPE   IcmpCloseHandle = NULL;
 
-    typedef HANDLE  (WINAPI* Icmp6CreateFile_PROC_TYPE)  (VOID);
-    typedef DWORD   (WINAPI* Icmp6SendEcho2_PROC_TYPE)    (HANDLE, HANDLE, FARPROC, PVOID, sockaddr *, sockaddr *, LPVOID, WORD, PIP_OPTION_INFORMATION, LPVOID, DWORD, DWORD);
+    typedef HANDLE  (WINAPI* Icmp6CreateFile_PROC_TYPE) (VOID);
+    typedef DWORD   (WINAPI* Icmp6SendEcho2_PROC_TYPE)  (HANDLE, HANDLE, FARPROC, PVOID, sockaddr *, sockaddr *, LPVOID, WORD, PIP_OPTION_INFORMATION, LPVOID, DWORD, DWORD);
     Icmp6CreateFile_PROC_TYPE   Icmp6CreateFile = NULL;
     Icmp6SendEcho2_PROC_TYPE    Icmp6SendEcho2  = NULL;
+
+    typedef HANDLE  (WINAPI* InternetOpen_PROC_TYPE)        (LPCSTR, DWORD, LPCSTR, LPCSTR, DWORD); 
+    typedef HANDLE  (WINAPI* InternetOpenUrl_PROC_TYPE)     (HANDLE, LPCSTR, LPCSTR, DWORD, DWORD, DWORD_PTR);
+    typedef BOOL    (WINAPI* InternetCloseHandle_PROC_TYPE) (HANDLE);
+    typedef BOOL    (WINAPI* HttpQueryInfo_PROC_TYPE)       (HANDLE, DWORD, LPVOID, LPDWORD, LPDWORD);
+    typedef BOOL    (WINAPI* HttpSendRequest_PROC_TYPE)     (HANDLE, LPCSTR, DWORD, LPVOID, DWORD);
+    InternetOpen_PROC_TYPE        InternetOpen = NULL;
+    InternetOpenUrl_PROC_TYPE     InternetOpenUrl = NULL;
+    InternetCloseHandle_PROC_TYPE InternetCloseHandle = NULL;
+    HttpQueryInfo_PROC_TYPE       HttpQueryInfo = NULL;
+    HttpSendRequest_PROC_TYPE     HttpSendRequest = NULL;
     
 #if defined(NETICON_IPV6_READY)
     typedef ADDRINFO *addr6_type;
@@ -313,6 +329,16 @@ namespace net
             {
                 Icmp6CreateFile = (Icmp6CreateFile_PROC_TYPE)   GetProcAddress(iphlpapi_lib,"Icmp6CreateFile");
                 Icmp6SendEcho2  = (Icmp6SendEcho2_PROC_TYPE)    GetProcAddress(iphlpapi_lib,"Icmp6SendEcho2");
+            }
+
+            wininet_lib = LoadLibrary(_T("WININET.DLL"));
+            if (wininet_lib)
+            {
+                InternetOpen        = (InternetOpen_PROC_TYPE)        GetProcAddress(wininet_lib,"InternetOpenA");
+                InternetOpenUrl     = (InternetOpenUrl_PROC_TYPE)     GetProcAddress(wininet_lib,"InternetOpenUrlA");
+                InternetCloseHandle = (InternetCloseHandle_PROC_TYPE) GetProcAddress(wininet_lib,"InternetCloseHandle");
+                HttpQueryInfo       = (HttpQueryInfo_PROC_TYPE)       GetProcAddress(wininet_lib,"HttpQueryInfoA");
+                HttpSendRequest     = (HttpSendRequest_PROC_TYPE)     GetProcAddress(wininet_lib,"HttpSendRequestA");
             }
         }
         ~lib_power()
@@ -363,6 +389,74 @@ namespace net
             }
         }
         return addr;
+    }
+
+    bool wget(LPCSTR url)
+    {
+        if (NULL == wininet_lib)
+        {
+            OutputDebugString(_T("LoadLibrary(\"wininet.dll\"): faild"));
+            return false;
+        }
+        if (NULL == InternetOpen)
+        {
+            OutputDebugString(_T("GetProcAddress(LoadLibrary(\"wininet.dll\"), \"InternetOpenA\"): faild"));
+            return false;
+        }
+        if (NULL == InternetOpenUrl)
+        {
+            OutputDebugString(_T("GetProcAddress(LoadLibrary(\"wininet.dll\"), \"InternetOpenUrlA\"): faild"));
+            return false;
+        }
+        if (NULL == InternetCloseHandle)
+        {
+            OutputDebugString(_T("GetProcAddress(LoadLibrary(\"wininet.dll\"), \"InternetCloseHandle\"): faild"));
+            return false;
+        }
+        if (NULL == HttpQueryInfo)
+        {
+            OutputDebugString(_T("GetProcAddress(LoadLibrary(\"wininet.dll\"), \"HttpQueryInfoA\"): faild"));
+            return false;
+        }
+        if (NULL == HttpSendRequest)
+        {
+            OutputDebugString(_T("GetProcAddress(LoadLibrary(\"wininet.dll\"), \"HttpSendRequestA\"): faild"));
+            return false;
+        }
+
+        HANDLE hInet = InternetOpen("neticon", INTERNET_OPEN_TYPE_PRECONFIG, NULL, NULL, 0);
+        if (hInet == NULL)
+        {
+            OutputDebugString(_T("InternetOpen: faild"));
+            return false;
+        }
+        HANDLE hHttpRequest = InternetOpenUrl(hInet, url, NULL, 0, 0, 0);
+        if (hHttpRequest == NULL)
+        {
+            OutputDebugString(_T("InternetOpenUrl: faild"));
+            InternetCloseHandle(hInet);
+            return false;
+        }
+
+        if (!HttpSendRequest(hHttpRequest, NULL, 0, NULL, 0))
+        {
+            OutputDebugString(_T("InternetOpenUrl: faild"));
+            InternetCloseHandle(hHttpRequest);
+            InternetCloseHandle(hInet);
+            return false;
+        }
+
+        DWORD dwCode = 0, dwSize = sizeof(DWORD);
+        if (!HttpQueryInfo(hHttpRequest, HTTP_QUERY_STATUS_CODE | HTTP_QUERY_FLAG_NUMBER,
+                &dwCode, &dwSize, NULL))
+        {
+            OutputDebugString(_T("HttpQueryInfo: faild"));
+        }
+
+        InternetCloseHandle(hHttpRequest);
+        InternetCloseHandle(hInet);
+
+        return (dwCode / 100) == 2;
     }
 
 #if defined(NETICON_IPV6_READY)
@@ -643,6 +737,18 @@ public:
 };
 
 
+class url_watch :public watch_base
+{
+public:
+    LPCSTR url;
+    url_watch(LPCSTR a_url) :url(a_url)
+    {
+    }
+    net_status_type check_target()
+    {
+        return net::wget(url) ? net_status_ok: net_status_ng;
+    }
+};
 class ping_watch :public watch_base
 {
 public:
@@ -1058,6 +1164,7 @@ namespace net_icon
     LPCWSTR display_name = NULL;
     std::wstring display_message;
     LPCWSTR port_str = NULL;
+    BOOL url_check = FALSE;
     LPCWSTR interval_str = NULL;
     WCHAR host_name[1024];
     char ansi_host_name[1024];
@@ -1136,13 +1243,17 @@ namespace net_icon
         //
         //  サービスの取得
         //
-        if (NULL == port_str)
+        if (url_check)
         {
-            target_net = new ping_watch(ansi_host_name);
+            target_net = new url_watch(ansi_host_name);
+        }
+        else if (NULL != port_str)
+        {
+            target_net = new port_watch(ansi_host_name, _wtoi(port_str));
         }
         else
         {
-            target_net = new port_watch(ansi_host_name, _wtoi(port_str));
+            target_net = new ping_watch(ansi_host_name);
         }
         
         if (!target_net)
@@ -1817,15 +1928,24 @@ namespace net_icon
         {
             display_name = args[1];
             lstrcpyW(host_name, display_name);
-            LPCWSTR port_separator = wcschr(host_name, L':');
-            if (port_separator)
+
+            if (0 == wcsncmp(host_name, L"http://", 7) ||
+                0 == wcsncmp(host_name, L"https://", 8))
             {
-                host_name[port_separator -host_name] = L'\0';
-                port_str = port_separator +1;
+                url_check = TRUE;
             }
             else
             {
-                port_str = NULL;
+			    LPCWSTR port_separator = wcschr(host_name, L':');
+                if (port_separator)
+                {
+                    host_name[port_separator -host_name] = L'\0';
+                    port_str = port_separator +1;
+                }
+                else
+                {
+                    port_str = NULL;
+                }
             }
             LPCWSTR interval_separator = wcschr(port_str ? port_str: host_name, L'@');
             if (interval_separator)

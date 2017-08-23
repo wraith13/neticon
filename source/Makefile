@@ -13,7 +13,7 @@ TARGET = neticon.exe
 all : $(TARGET)
 
 $(TARGET) : $(OBJS)
-	g++ -std=c++14 -o $@ $(OBJS) $(LIBS)
+	g++ -mwindows -std=c++14 -o $@ $(OBJS) $(LIBS)
 
 .cpp.o :
 	g++ -std=c++14 -c $(CFLAGS) $< -o $@
