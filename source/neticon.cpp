@@ -1198,7 +1198,7 @@ namespace net_icon
 #   pragma warning(disable:4302)
 #   pragma warning(disable:4311)
 #endif
-                mii.dwItemData = (DWORD)icon; // ←mii.hbmpItem でビットマップを使う場合にはいらないが、WM_THEMECHANGED に備えて保存しておく。
+                mii.dwItemData = (ULONG_PTR)icon; // ←mii.hbmpItem でビットマップを使う場合にはいらないが、WM_THEMECHANGED に備えて保存しておく。
 #if defined(_MSC_VER)
 #   pragma warning(pop)
 #endif
@@ -1451,7 +1451,7 @@ namespace net_icon
                 update_icon();
                 if (control_notify_icon(NIM_ADD, hwnd, NOTIFYICON_ID, make_icon_caption(net_status_null), base_icon))
                 {
-                    PostMessage(hwnd, WM_COMMAND, MAKEWPARAM(DO_START_ICON, 0), NULL);
+                    PostMessage(hwnd, WM_COMMAND, MAKEWPARAM(DO_START_ICON, 0), 0);
                 }
                 else
                 {
