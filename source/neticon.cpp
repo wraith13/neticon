@@ -1198,7 +1198,7 @@ namespace net_icon
 #   pragma warning(disable:4302)
 #   pragma warning(disable:4311)
 #endif
-                mii.dwItemData = (DWORD)icon; // ←mii.hbmpItem でビットマップを使う場合にはいらないが、WM_THEMECHANGED に備えて保存しておく。
+                mii.dwItemData = (ULONG_PTR)icon; // ←mii.hbmpItem でビットマップを使う場合にはいらないが、WM_THEMECHANGED に備えて保存しておく。
 #if defined(_MSC_VER)
 #   pragma warning(pop)
 #endif
