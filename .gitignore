@@ -35,3 +35,5 @@
 testsnap
 snapshot
 release
+
+source/VERSION.h
