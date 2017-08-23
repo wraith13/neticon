@@ -1451,7 +1451,7 @@ namespace net_icon
                 update_icon();
                 if (control_notify_icon(NIM_ADD, hwnd, NOTIFYICON_ID, make_icon_caption(net_status_null), base_icon))
                 {
-                    PostMessage(hwnd, WM_COMMAND, MAKEWPARAM(DO_START_ICON, 0), NULL);
+                    PostMessage(hwnd, WM_COMMAND, MAKEWPARAM(DO_START_ICON, 0), 0);
                 }
                 else
                 {
