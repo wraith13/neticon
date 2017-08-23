@@ -7,42 +7,13 @@
 
 ///////////////////////////////////////////////////////////////////////////////
 //
-//  ■ neticon.rc
-//      http://tricklib.com/cxx/ex/neticon/neticon.rc
+//  ■ プロジェクトページ
+//      https://github.com/wraith13/neticon/
 //
-//  □ 関連ファイル
-//      ソースファイル
-//      http://tricklib.com/cxx/ex/neticon/neticon.cpp
-//      リソースヘッダファイル
-//      http://tricklib.com/cxx/ex/neticon/neticon.rh
-//      アプリケーションアイコン
-//      http://tricklib.com/cxx/ex/neticon/neticon.ico
-//      デフォルトネットアイコン
-//      http://tricklib.com/cxx/ex/neticon/svc.ico
-//      "start"アイコン
-//      http://tricklib.com/cxx/ex/neticon/start.ico
-//      "stop"アイコン
-//      http://tricklib.com/cxx/ex/neticon/stop.ico
-//      "log"アイコン
-//      http://tricklib.com/cxx/ex/neticon/log.ico
-//      "閉じる"アイコン
-//      http://tricklib.com/cxx/ex/neticon/close.ico
-//      "OK"オーバーレイアイコン
-//      http://tricklib.com/cxx/ex/neticon/ok.ico
-//      "NG"オーバーレイアイコン
-//      http://tricklib.com/cxx/ex/neticon/ng.ico
-//      チェックマークオーバーレイアイコン
-//      http://tricklib.com/cxx/ex/neticon/check.ico
-//      全ファイルパック
-//      http://tricklib.com/cxx/ex/neticon/neticon.zip
+//  ■ ライセンス情報
+//      https://github.com/wraith13/neticon/blob/master/LICENSE_1_0.txt
 //
-//  □ リファレンス・サポートページ
-//      http://tricklib.com/cxx/ex/neticon/
-//
-//  □ ライセンス情報
-//      http://tricklib.com/license.htm
-//
-//  □ コンパイル方法
+//  ■ コンパイル方法
 //      case Borland C++
 //          brcc32 neticon.rc
 //      case Visual C++
