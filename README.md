@@ -52,7 +52,7 @@ Visual Studio 2017 より新しい Visual Studio や通常と異なるパスに�
 
 といった感じで vcvarsall.bat のパスを指定してください。
 
-> 非推奨となりますが、その他の C++ コンパイラでもビルドすることは可能です。 Borland C++ Compiler でのビルドは[こちら](#solomon-を使わない-borland-c-compiler-でのビルド非推奨)を参照してください。 mingw でのコンパイルは @mattn さんが対応してくださった .\source\Makefile を使ってビルドしてください。
+> 非推奨となりますが、その他の C++ コンパイラでもビルドすることは可能です。 Borland C++ Compiler でのビルドは[こちら](#solomon-を使わない-borland-c-compiler-でのビルド非推奨)を参照してください。 mingw でのコンパイルは [@mattn](https://github.com/mattn) さんが対応してくださった .\source\Makefile を使ってビルドしてください。
 
 #### [solomon](https://github.com/wraith13/solomon)
 
