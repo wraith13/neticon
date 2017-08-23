@@ -21,10 +21,14 @@ $(TARGET) : $(OBJS)
 .rc.res :
 	windres -c cp932 -O coff -I. $< -o $@
 
-neticon.cpp : VERSION.h
+neticon.cpp : generate-VERSION.h generate-BUILD.h
 
-VERSION.h : VERSION.cmd
-	cat VERSION.cmd | grep VERSION_ | awk '{print $$2}' | sed 's/=/ /' | xargs -i -n 1 echo "#define {}" > VERSION.h
+generate-VERSION.h : VERSION.cmd
+	@cat VERSION.cmd | grep VERSION_ | awk '{print $$2}' | sed 's/=/ /' | xargs -i -n 1 echo "#define {}" > VERSION.h
+
+generate-BUILD.h :
+	@echo '// このファイルは mingw Makefile で自動生成されたものです。' | iconv -f utf-8 -t cp932 > BUILD.h
+	@echo '#define BUILD mingw Build' >> BUILD.h
 
 clean :
-	rm -f *.o $(TARGET) VERSION.h
+	rm -f *.o $(TARGET) VERSION.h BUILD.h
