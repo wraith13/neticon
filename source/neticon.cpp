@@ -1985,12 +1985,18 @@ namespace net_icon
             MessageBoxW
             (
                 NULL,
-                L"タスクバーの通知領域上で監視するリモートホストを指定してください。\n"
+                L"タスクバーの通知領域上で監視する対象を指定してください。\n"
                 L"\n"
+                L"ping チェック\n"
+                L"usage: neticon リモートホスト名[@監視間隔(秒単位)] [アイコンファイル名 [アイコンインデックス値]]\n"
                 L"\n"
-                L"usage: neticon [リモートホスト名[:ポート番号][@監視間隔(秒単位)] [アイコンファイル名 [アイコンインデックス値]]]\n"
+                L"port チェック\n"
+                L"usage: neticon リモートホスト名:ポート番号[@監視間隔(秒単位)] [アイコンファイル名 [アイコンインデックス値]]\n"
                 L"\n"
-                L"cf. http://tricklib.com/cxx/ex/neticon/\n",
+                L"http/https チェック\n"
+                L"usage: neticon URL[@監視間隔(秒単位)] [アイコンファイル名 [アイコンインデックス値]]]\n"
+                L"\n"
+                L"cf. https://github.com/wraith13/neticon/\n",
                 application_name,
                 MB_ICONINFORMATION |MB_OK
             );
