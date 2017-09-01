@@ -43,6 +43,7 @@ APPLICATION_ICON        ICON DISCARDABLE "resource\\neticon.ico"
 
 STATUS_OK_ICON          ICON DISCARDABLE "resource\\ok.ico"
 STATUS_NG_ICON          ICON DISCARDABLE "resource\\ng.ico"
+STATUS_ALT_NG_ICON      ICON DISCARDABLE "resource\\ng.dark.ico"
 
 //MENU_CHECKMARK_ICON     ICON DISCARDABLE "resource\\check.ico"
 

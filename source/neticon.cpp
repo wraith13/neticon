@@ -86,6 +86,11 @@
 #endif
 #endif
 
+#if !defined(NETICON_NG_BLINK_INTERVAL) // ms
+#define NETICON_NG_BLINK_INTERVAL   1000
+#endif
+#define NETICON_TIMER_FOR_BLINK     100
+
 LPCWSTR application_name = L"neticon";
 
 //////////////////////////////////////////////////////////////////////////////
@@ -1176,6 +1181,7 @@ namespace net_icon
     SIZE smallicon_size;
     HICON base_icon = NULL;
     std::map<net_status_type, HICON> icon_table;
+    HICON alt_ng_icon = NULL;
     HICON checkmark_icon = NULL;
     
     //
@@ -1183,6 +1189,7 @@ namespace net_icon
     //
     watch_base *target_net = NULL;
     std::map<net_status_type, LPCWSTR> text_table;
+    net_status_type last_status = net_status_null;
 
     //
     //  dpi
@@ -1412,10 +1419,36 @@ namespace net_icon
     //
     void update_status(HWND hwnd, net_status_type current_status)
     {
+        if (last_status != current_status)
+        {
+            last_status = current_status;
+            MemoryBarrier();
+        }
+        bool is_alt_ng_icon = false;
+        if (net_status_ng == current_status)
+        {
+            auto tick = GetTickCount64();
+            auto next = (NETICON_NG_BLINK_INTERVAL -((tick -1) % NETICON_NG_BLINK_INTERVAL)) +1;
+            SetTimer(hwnd, NETICON_TIMER_FOR_BLINK, (UINT)next, NULL);
+            if (1 == ((tick /NETICON_NG_BLINK_INTERVAL) & 1))
+            {
+                is_alt_ng_icon = true;
+            }
+        }
+
         //
         //  通知アイコンの更新
         //
-        control_notify_icon(NIM_MODIFY, hwnd, NOTIFYICON_ID, make_icon_caption(current_status), get_status_icon(current_status));
+        control_notify_icon
+        (
+            NIM_MODIFY,
+            hwnd,
+            NOTIFYICON_ID,
+            make_icon_caption(current_status),
+            is_alt_ng_icon ?
+                alt_ng_icon:
+                get_status_icon(current_status)
+        );
     }
 
     void purge_thread()
@@ -1531,6 +1564,7 @@ namespace net_icon
         icon_table[net_status_null] = base_icon;
         icon_table[net_status_ng]   = make_status_icon(STATUS_NG_ICON);
         icon_table[net_status_ok]   = make_status_icon(STATUS_OK_ICON);
+        alt_ng_icon = make_status_icon(STATUS_ALT_NG_ICON);
     }
 
     void update_dpi(HWND hwnd)
@@ -1686,7 +1720,8 @@ namespace net_icon
             break;
             
         case WM_TIMER:
-            update_status(hwnd, target_net->check());
+            MemoryBarrier();
+            update_status(hwnd, last_status);
             break;
         
         case WM_COMMAND:

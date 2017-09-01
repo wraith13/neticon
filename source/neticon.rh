@@ -48,6 +48,7 @@
 
 #define STATUS_OK_ICON          301
 #define STATUS_NG_ICON          302
+#define STATUS_ALT_NG_ICON      303
 
 #define MENU_CHECKMARK_ICON     1000
 
