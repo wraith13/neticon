@@ -7,7 +7,7 @@
 
 コンパイル済みのバイナリはこちらからダウンロードしてください。
 
-* [neticon-1.06.000.zip](https://github.com/wraith13/neticon/releases/download/v1.06.000/neticon-1.06.000.zip) ( release x86 unicode ビルド )
+* [neticon-1.07.000.zip](https://github.com/wraith13/neticon/releases/download/v1.06.000/neticon-1.07.000.zip) ( release x86 unicode ビルド )
 
 > x64 ビルドもできますが、 Windows における 64 bit プログラムは 64 bit でなければならない理由が特にない場合はフットスタンプがデカくなるデメリットのほうが大きいだけなのでコンパイル済みのモノを提供する予定はありませんし、自前でビルドするにしてもそれを常用するのはオススメしません。
 
