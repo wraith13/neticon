@@ -53,6 +53,12 @@ neticon.exe twitter.com:443@90 twitter.ico
 
 ※ default 以外のアイコンを使用する場合は自前でアイコンファイルを用意するなり shell32.dll, imageres.dll あたりのヤツを参照するなりしてください。
 
+```cmd
+neticon.exe https://github.com/wraith13/neticon/
+```
+
+60秒ごとに https://github.com/wraith13/neticon/ にアクセスしてレスポンスの HTTP ステータスコードが 200 番台かどうかで生死確認。通知領域のアイコンには default のモノを使用。
+
 ## ビルド方法
 
 ### 前準備
