@@ -35,6 +35,7 @@
 testsnap
 snapshot
 release
+workspace.local
 
 source/VERSION.h
 source/BUILD.h
