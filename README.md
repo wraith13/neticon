@@ -59,6 +59,14 @@ neticon.exe https://github.com/wraith13/neticon/
 
 60秒ごとに https://github.com/wraith13/neticon/ にアクセスしてレスポンスの HTTP ステータスコードが 200 番台かどうかで生死確認。通知領域のアイコンには default のモノを使用。
 
+### 目的外応用例
+
+```cmd
+neticon.exe http://dummy.localhost/ C:\Windows\System32\SHELL32.dll 34
+```
+
+あえて常にエラー表示になるように指定を行い、エラー表示の点滅が続いてることでローカルマシンがフリーズしてないことの確認に使用。
+
 ## ビルド方法
 
 ### 前準備
