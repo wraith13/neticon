@@ -1,6 +1,9 @@
 @IF /I "" NEQ "%VCVARSALL_PATH%" IF EXIST "%VCVARSALL_PATH%" CALL "%VCVARSALL_PATH%" %*&GOTO :EOF
 
-@SET VCVARSALL_PATH=C:\Program Files\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvarsall.bat
+@SET VCVARSALL_PATH=C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\VC\Auxiliary\Build\vcvarsall.bat
+@IF EXIST "%VCVARSALL_PATH%" CALL "%VCVARSALL_PATH%" %*&GOTO :EOF
+
+@SET VCVARSALL_PATH=C:\Program Files (x86)\Microsoft Visual Studio\2017\Professional\VC\Auxiliary\Build\vcvarsall.bat
 @IF EXIST "%VCVARSALL_PATH%" CALL "%VCVARSALL_PATH%" %*&GOTO :EOF
 
 @SET VCVARSALL_PATH=C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvarsall.bat
